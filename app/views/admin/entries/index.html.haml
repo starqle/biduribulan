@@ -1,0 +1,48 @@
+%h1 
+  Listing
+  = Entry.get_object(params[:entry_type])['name'].pluralize
+
+%table
+  %tr
+    %th Title
+    %th Name
+    %th Parent
+    %th Content
+    %th User
+    %th Excerpt
+    %th Status
+    %th Comment status
+    %th Parent
+    %th Guid
+    %th Menu order
+    %th Entry Type
+    - if(params[:entry_type].presence || 'entry') == 'media'
+      %th Image
+    %th
+
+  - @entries.each do |entry|
+    %tr
+      %td
+        = link_to entry.title, edit_admin_entry_path(entry)
+      %td= entry.name
+      %td= entry.parent.present? ? entry.parent.title : ''
+      %td= truncate_html(entry.content, 50, '...')
+      %td= entry.user.email
+      %td= entry.excerpt
+      %td= entry.status
+      %td= entry.comment_status
+      %td= entry.parent_id
+      %td= entry.guid
+      %td= entry.menu_order
+      %td= entry.entry_type
+      - if(params[:entry_type].presence || 'entry') == 'media'
+        %td= image_tag entry.image.url(:thumb)
+      %td= link_to 'Destroy', [:admin, entry], :confirm => 'Are you sure?', :method => :delete
+
+%br
+
+= will_paginate @entries
+
+= link_to 'New ' + Entry.get_object(params[:entry_type])['name'].pluralize, new_admin_entry_path(:entry_type => params[:entry_type])
+
+

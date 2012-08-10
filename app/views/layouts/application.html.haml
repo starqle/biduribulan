@@ -1,0 +1,17 @@
+- filenames = ['index']
+
+- if is_home?
+  - filenames.unshift('home')
+- elsif params[:_entry_type_].present?
+  - if is_page?
+    - filenames.unshift('page')
+    - if @entry.page_template.present?
+      - filenames.unshift(page_template_filename(@entry.page_template))
+  - elsif is_entry?
+    - filenames.unshift('entry')
+    - filenames.unshift(@entry.entry_type + '_entry')
+  - elsif is_categories?
+    - filenames.unshift('categories')
+    
+  
+= render_file filenames

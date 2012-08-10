@@ -1,0 +1,35 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  parent_id: 1
+  lft: 1
+  rgt: 1
+  title: MyString
+  content: MyText
+  user: 
+  excerpt: MyText
+  status: MyString
+  comment_status: MyString
+  parent_id: 1
+  guid: MyString
+  menu_order: 1
+  type: 
+  mime_type: MyString
+
+two:
+  name: MyString
+  parent_id: 1
+  lft: 1
+  rgt: 1
+  title: MyString
+  content: MyText
+  user: 
+  excerpt: MyText
+  status: MyString
+  comment_status: MyString
+  parent_id: 1
+  guid: MyString
+  menu_order: 1
+  type: 
+  mime_type: MyString

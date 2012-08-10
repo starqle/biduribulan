@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  content: MyText
+  parent_id: 1
+  lft: 1
+  rgt: 1
+  entry: 
+  user: 
+  author_name: MyString
+  author_email: MyString
+  author_url: MyString
+  author_ip: MyString
+  type: 
+  approved: false
+
+two:
+  content: MyText
+  parent_id: 1
+  lft: 1
+  rgt: 1
+  entry: 
+  user: 
+  author_name: MyString
+  author_email: MyString
+  author_url: MyString
+  author_ip: MyString
+  type: 
+  approved: false

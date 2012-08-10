@@ -1,0 +1,51 @@
+!!!
+%html
+  %head
+    %title Biduribulan
+    = stylesheet_link_tag    "admin_application", :media => "all"
+    = javascript_include_tag "admin/application"
+    = csrf_meta_tags
+  %body
+    #wrapper
+      #header.container_12
+        #toolbar.grid_12
+          - if user_signed_in?
+            Sign in as
+            = current_user.email
+            , not you?
+            = link_to "sign_out", destroy_user_session_path, :method => :delete
+          - else
+            = link_to "sign_up", new_user_registration_path
+            ,
+            = link_to "sign_in", new_user_session_path
+            ,
+            = link_to "sign in from twitter", '/auth/twitter'
+
+        #navigation
+          %ul
+            %li= link_to 'View Website', home_path
+            %li= link_to 'Home', admin_home_path
+            - BIDURI['entry_types'].each do |p|
+              %li= link_to p['name'].pluralize, admin_entries_path(:entry_type => p['entry_type'])
+              %ul
+                %li= link_to 'New ' + p['name'], new_admin_entry_path(:entry_type => p['entry_type'])
+                - if p.key?('taxonomies')
+                  - p['taxonomies'].each do |t|
+                    %li= link_to t['name'].pluralize, admin_taxonomies_path(:taxonomy_type => t['taxonomy_type'])
+                    %li= link_to "New #{t['name']}", new_admin_taxonomy_path(:taxonomy_type => t['taxonomy_type'])
+            %li= link_to 'Users', admin_users_path
+            %li= link_to 'Roles', admin_roles_path
+            %li= link_to 'Themes', admin_themes_path
+            %li= link_to 'Custom Fields', admin_options_path(:option_type => 'custom_fields')
+            %li= link_to 'Authentications', admin_authentications_path
+
+      #wrapper_content.container_12
+        - if notice
+          %p#notice= notice
+        - if alert
+          %p#alert= alert
+
+        = debug params
+        = yield
+
+    #footer.container_12

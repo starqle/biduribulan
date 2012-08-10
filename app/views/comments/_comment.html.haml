@@ -1,0 +1,15 @@
+.entry.comment_entry
+  .entry_content.comment_entry_content
+    %h3
+      - if comment.user
+        = comment.user.email
+      - else
+        = comment.author_name
+      %span.posted_date_part
+        = comment.created_at.to_s(:long)
+    %p
+      = sanitize(comment.content) 
+
+    = link_to 'Destroy Comment', [comment.entry, comment],
+              :confirm => 'Are you sure?',
+              :method => :delete if can? :destroy, comment

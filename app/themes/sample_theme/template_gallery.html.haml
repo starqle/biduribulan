@@ -1,0 +1,33 @@
+!!!
+%html
+  = render_file 'head'
+  %body{class: "#{body_class}"}
+    #wrapper.container_12
+      #header_region.region
+        = render_file 'header'
+      #main_region.region.grid_9
+        = render_file 'notification'   
+        
+        #yielded_area.area.grid_7.alpha.omega
+          .component
+            .component_title
+              Galeri
+            .component_content
+              - taxonomies = Taxonomy.find_all_by_taxonomy_type_and_taxonomy_id('media_group', nil)
+              - if taxonomies.present?
+                %ul
+                  - taxonomies.each do |taxonomy|
+                    %li
+                      = link_to taxonomy.name, taxonomy.url
+                      (
+                      = taxonomy.children.count.to_s + " media group,"
+                      = taxonomy.self_and_descendants.collect(&:entries).collect(&:count).sum.to_s + " media"
+                      )
+              - else
+                Tidak ada media group atau media
+          = #render_file 'yielded'
+            
+            
+      = render_file 'sidebar'
+      #wrapper_footer
+    = render_file 'footer'

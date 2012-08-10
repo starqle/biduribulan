@@ -1,0 +1,117 @@
+= simple_form_for [:admin, @entry], html: {class: 'form-horizontal'} do |f|
+  = f.error_notification
+
+  = f.input :entry_type, as: :hidden
+  = f.input :user_id, as: :hidden
+  = f.input :title
+
+  - if @entry.is? 'link'
+    = f.input :content, as: :string
+  - else
+    = f.input :content
+
+  - if @entry.is? 'page'
+    = f.association :parent, collection: Entry.get_tree(@entry.entry_type).collect{|c| ['- '*c.depth + c.title, c.id]}, include_blank: '- none -'
+    = f.input :menu_order
+
+  - if @entry.is? 'media'
+    = f.input :image
+      
+  - Entry.taxonomy_types(@entry.entry_type).each do |taxonomy_type|
+    = label_tag Taxonomy.get(taxonomy_type)['name']
+    - if @entry.is? 'menu'
+      - if @entry.id.present?
+        - current_level = 100
+        - Taxonomy.get_tree(taxonomy_type).each do |taxonomy|
+          - if taxonomy.entries.find_all_by_entry_type('menu').present? && !taxonomy.entries.find_all_by_entry_type('menu').include?(@entry)
+            - current_level = taxonomy.depth if taxonomy.depth < current_level
+          - elsif taxonomy.depth <= current_level
+            - current_level = 100
+            = '- '*taxonomy.depth
+            = check_box_tag "entry[taxonomy_ids][]", taxonomy.id, @entry.taxonomies.include?(taxonomy)
+            = taxonomy.name
+            %br
+        .controls
+          = link_to 'New ' + Taxonomy.get(taxonomy_type)['name'], new_admin_taxonomy_path(taxonomy_type: taxonomy_type)
+      - else
+        = "Enable automatically after saving the menu entry"  
+    - else
+      - if Taxonomy.get_tree(taxonomy_type).present?
+        - if Taxonomy.get(taxonomy_type)['multiple']
+          = f.input :taxonomies, as: :check_boxes do 
+            = f.collection_check_boxes :taxonomy_ids, Taxonomy.get_tree(taxonomy_type), :id, :name do |b|
+              - b.check_box(style: "float: left; margin-right: 5px; margin-left: #{b.object.depth * 18}px") + b.label
+        - else
+          = f.association :taxonomies, as: :radio_buttons, collection: Taxonomy.get_tree(taxonomy_type), label_method: :name, value_method: :id
+      .controls
+        = link_to 'New ' + Taxonomy.get(taxonomy_type)['name'], new_admin_taxonomy_path(taxonomy_type: taxonomy_type)
+      
+  - if @entry.is? 'page'
+    - entry_meta = @entry.entry_metas.find_by_key('page_template').presence || @entry.entry_metas.build(key: 'page_template')
+    = f.simple_fields_for :entry_metas, entry_meta do |f_em|
+      = f_em.input :key , as: :hidden
+      = f_em.input :value, as: :select, collection: available_page_templates, label_method: :humanize, prompt: '- none -', label: t('page_template')
+
+  - unless @entry.is?('media') || @entry.is?('menu') || @entry.is?('link')
+    - media = @entry.children.find_by_entry_type('media').presence || @entry.children.build(entry_type: 'media', user_id: current_user.id, status: 'publish', comment_status: 'close')
+    = f.fields_for :children, media do |f_m|
+      = f_m.input :user_id, as: :hidden
+      = f_m.input :status, as: :hidden
+      = f_m.input :comment_status, as: :hidden
+      = f_m.input :entry_type , as: :hidden
+      = f_m.input :title
+      = f_m.input :image, label: t('featured_image')
+
+  - unless @entry.is?('menu') || @entry.is?('link')
+    = f.input :comment_status, as: :radio_buttons, collection: [['open'], ['close']], label_method: :last, value_method: :first
+    = f.input :status, disabled: true
+    
+  - Option.find_all_by_option_type('custom_field').select{|s| YAML.load(s.value)['entry_types'].split(',').collect(&:strip).include?@entry.entry_type}.each do |option|
+    .field
+      = label_tag option.key
+      %br
+    - fields = YAML.load(option.value)['fields']
+    - fields.each_with_index do |field, index|
+      - key = (option.key.parameterize + '-' + field['name'].parameterize).underscore
+      - entry_meta = @entry.entry_metas.find_by_key(key).presence || @entry.entry_metas.build(key: key)
+      = f.fields_for :entry_metas, entry_meta do |b|
+        = b.hidden_field :key
+        .field
+          = b.label :value, field['label']
+          - case field['type']
+          - when 'text_field_tag'
+            = b.text_field :value
+          - when 'text_area_tag'
+            = b.text_area :value
+          - when 'select_tag'
+            = b.select(:value, field['option'].split('|').collect(&:strip).collect{|c| [c.split('=')[0], c.split('=')[1]]}, include_blank: '- none -')
+          - when 'check_box_tag'
+            - if field['option'].present?
+              - entry_meta.value = YAML.load(entry_meta.value) if entry_meta.value.present?
+              - field['option'].split('|').collect(&:strip).each do |rb|
+                - rbs = rb.split('=')
+                = check_box_tag "entry[entry_metas_attributes][#{index}][value][]", rbs[1], (entry_meta.value.present? ? entry_meta.value.include?(rbs[1]) : false)
+                = rbs[0]
+                %br
+            - else
+              = b.check_box :value
+          - when 'radio_button_tag'
+            - field['option'].split('|').collect(&:strip).each do |rb|
+              - rbs = rb.split('=')
+              = radio_button_tag "entry[entry_metas_attributes][#{index}][value]", rbs[1], (entry_meta.value == rbs[1])
+              = rbs[0]
+              %br
+          - when 'date_select_tag'
+            - #entry_meta.value = Time.parse(entry_meta.value) if entry_meta.value.present?
+            = b.date_select :date_value
+          - when 'datetime_select_tag'
+            - #entry_meta.value = Time.parse(entry_meta.value) if entry_meta.value.present?
+            = b.datetime_select :date_value
+    
+
+        
+  .actions
+    = f.submit 'Publish', name: 'entry[status]', value: (@entry.id.present? ? 'update' : 'publish')
+    = f.submit 'Save Draft', name: 'entry[status]', value: 'draft'
+    
+

@@ -1,0 +1,9 @@
+%h1 
+  Editing
+  = Entry.get_object(@entry.entry_type)['name']
+
+= render 'form'
+
+= link_to 'Show', [:admin, @entry]
+\|
+= link_to 'Back', admin_entries_path

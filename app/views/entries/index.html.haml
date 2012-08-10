@@ -1,0 +1,53 @@
+
+- if params[:_entry_type_] == 'media'
+  %h1
+    Media Group
+  - taxonomies = Taxonomy.find_by_slug(params[:_slug_]).children
+  - if taxonomies.present?
+    %ul
+      - taxonomies.each do |taxonomy|
+        %li
+          = link_to taxonomy.name, taxonomy.url
+          (
+          = taxonomy.children.count.to_s + " media group,"
+          = taxonomy.entries.count.to_s + " media"
+          )
+  - else
+    Tidak ada media group dalam media group ini
+    
+  %h1
+    Media Item
+  - if @entries.present?
+    - @entries.each do |entry|
+      = image_tag entry.image(:thumb)
+      = entry.title
+  - else
+    Tidak ada media dalam media group ini
+- else
+  %h1 Listing entries
+
+  %table
+    %tr
+      %th Name
+      %th Title
+      %th Content
+      %th User
+      %th
+      %th
+      %th
+
+    - @entries.each do |entry|
+      %tr
+        %td= entry.name
+        %td= entry.title
+        %td= entry.content
+        %td= entry.user ? entry.user.email : ''
+        %td
+          = link_to 'Show', entry if can? :read, entry
+        %td
+          = link_to 'Edit', edit_admin_entry_path(entry) if can? :edit, entry
+        %td
+          = link_to 'Destroy', [:admin, entry], :confirm => 'Are you sure?', :method => :delete if can? :destroy, entry
+
+  - if can? :new, Entry
+    = link_to 'New Entry', new_admin_entry_path

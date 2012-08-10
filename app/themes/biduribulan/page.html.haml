@@ -1,0 +1,29 @@
+!!!
+%html
+  = render_file 'head'
+  %body{class: "#{body_class}"}
+    #wrapper.container_12
+      #header_region.region
+        = render_file 'header'
+      #main_region.region.grid_9
+        = render_file 'notification'   
+        
+        #yielded_area.area.grid_7.alpha.omega
+
+
+          .component#single_component
+            .component_content
+              .entry
+                %h1.entry_title
+                  = @entry.title
+                .entry_featured_image= image_tag @entry.children.find_by_entry_type('media').image.url(:article_fit) if @entry.children.find_by_entry_type('media').present?
+                  
+                .entry_content.component_content
+                  = raw(@entry.content)
+                .entry_foot.component_foot
+                  = link_to 'Edit', edit_admin_entry_path(@entry) if can? :edit, @entry
+            
+            
+      = render_file 'sidebar'
+      #wrapper_footer
+    = render_file 'footer'

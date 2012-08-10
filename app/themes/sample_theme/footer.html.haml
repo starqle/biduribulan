@@ -1,0 +1,19 @@
+#footer_region.region.container_12
+  #footer_top_area.area
+    .grid_12
+      
+  #footer_bottom_area.area
+    .grid_12
+      .component#copyright_component
+        &copy; 2012
+        = link_by_title('ICT Center')
+
+- if current_user && (current_user.is?(:admin) || current_user.is?(:editor))
+  .component.admin_toolbar_component.debug_component
+    %ul
+      %li= link_to 'Dashboard', admin_home_path
+      %li= link_to 'Entry', admin_entries_path
+      %li= link_to 'User', admin_users_path
+      %li= link_to 'Role', admin_roles_path
+      %li= link_to 'Authentications', admin_authentications_path
+

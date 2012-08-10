@@ -1,0 +1,23 @@
+%h1 Listing authentication
+
+%table
+  %tr
+    %th User
+    %th Provider
+    %th UID
+    %th
+    %th
+    %th
+
+  - @authentications.each do |authentication|
+    %tr
+      %td= authentication.user.email
+      %td= authentication.provider
+      %td= authentication.uid
+      %td= link_to 'Show', [:admin, authentication]
+      %td= link_to 'Edit', edit_admin_authentication_path(authentication)
+      %td= link_to 'Destroy', [:admin, authentication], :confirm => 'Are you sure?', :method => :delete
+
+%br
+
+= link_to 'New Entry', new_admin_authentication_path

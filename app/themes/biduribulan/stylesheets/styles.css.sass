@@ -1,0 +1,425 @@
+@import compass/reset
+@import compass/css3
+@import compass/layout
+@import position
+
+
+
+
+
+
+$fontfaces_dir: "biduribulan/stylesheets/fontfaces/"
+$images_dir: "../images/"
+
+$footer_height: 300px
++sticky-footer($footer_height, "#wrapper", "#wrapper_footer", "#footer_region")
+
++font-face("Museo300", font-files($fontfaces_dir + "museo300-regular-webfont.ttf", truetype, $fontfaces_dir + "museo300-regular-webfont.woff", woff, $fontfaces_dir + "museo300-regular-webfont.svg", svg), $fontfaces_dir + "museo300-regular-webfont.eot")
++font-face("Museo500", font-files($fontfaces_dir + "museo500-regular-webfont.ttf", truetype, $fontfaces_dir + "museo500-regular-webfont.woff", woff, $fontfaces_dir + "museo500-regular-webfont.svg", svg), $fontfaces_dir + "museo500-regular-webfont.eot")
++font-face("Museo700", font-files($fontfaces_dir + "museo700-regular-webfont.ttf", truetype, $fontfaces_dir + "museo700-regular-webfont.woff", woff, $fontfaces_dir + "museo700-regular-webfont.svg", svg), $fontfaces_dir + "museo700-regular-webfont.eot")
++font-face("Pictograms", font-files($fontfaces_dir + "modernpics-webfont.ttf", truetype, $fontfaces_dir + "modernpics-webfont.woff", woff, $fontfaces_dir + "modernpics-webfont.svg", svg), $fontfaces_dir + "modernpics-webfont.eot")
+
+$display_font_family: Museo500, Helvetica, Verdana, Arial, sans-serif
+
+$body_bgcolor: #CCC
+$wrapper_bgcolor: white
+$region_bgcolor: white
+
+$first_color: #555
+$second_color: #e42
+$third_color: #06f
+$fourth_color: #555
+$fifth_color: #555
+
+$dark_color: black
+$bright_color: white
+
+$main_text_color: #555
+$main_font_size: 13px
+$main_font_family: sans-serif
+
+$small_radius: 5px
+$medium_radius: $small_radius * 2
+$large_radius: $medium_radius * 2
+
+
+// General element style
+a
+  color: $second_color
+  text-decoration: none
+  &:hover
+    color: $third_color
+    text-decoration: underline
+
+h1
+  font: #{$main_font_size * 3} Museo700, $display_font_family
+  color: $dark_color
+  padding-top: $main_font_size * 3
+  padding-bottom: $main_font_size * 1.5
+h2
+  font: #{$main_font_size * 1.5}  $display_font_family
+  color: lighten($dark_color, 70)
+  padding-top: $main_font_size * 1.5
+  padding-bottom: $main_font_size * 0.5
+h3
+  font: #{$main_font_size * 1.2}  $display_font_family
+  color: $third_color
+p
+  line-height: $main_font_size * 1.7
+  padding: ($main_font_size * 0.75) 0
+
+
+body
+  background: $body_bgcolor
+  font: $main_font_size $main_font_family
+  color: $main_text_color
+
+  #wrapper
+    background: $wrapper_bgcolor
+    overflow: hidden
+    padding-bottom: 300px
+    #header_region.region
+      background-color: lighten($dark_color, 95)
+      position: relative
+      height: 180px
+      margin-bottom: 10px
+      z-index: 1000
+      +box-shadow(0px -8px 4px 10px transparentize($dark_color, 0.7))
+      .area
+        &#toolbar_area
+          #toolbar_component.component
+            margin-top: 5px
+            font-size: $main_font_size * 0.9
+            text-align: right
+            padding: 2px 0px
+        &#navigation_area
+          +rect_absolute(960, 50, 0, 128, lighten($dark_color, 85))
+          border-bottom: 2px solid $second_color
+      #logo_component
+        a
+          +rect_absolute(204, 76, 10, 30, url($images_dir + "logo.png") left bottom)
+          &:hover
+            background-position: left top
+          
+    #sidebar_left_region.region
+    #main_region.region
+      padding-bottom: 50px
+      .area          
+        &#featured_area
+          #featured_component.component
+            .component_content
+              position: relative
+              height: 300px
+              background-color: lighten($dark_color, 90)
+              // +border-radius($medium_radius)
+              .entry
+                position: relative
+                height: 300px
+                .entry_title
+                  +absolute(0, 0)
+                  line-height: 100%
+                  padding: 0px
+                  margin: 0px
+                  a
+                    display: inline-block
+                    color: white
+                    padding: 20px 20px
+                    background-color: transparentize($second_color, 0.3)
+                    &:hover
+                      background-color: $second_color
+                    
+                .entry_content
+                
+              .st_thumbs
+                +absolute_rb(5, 0)
+                .st_thumbs_item
+                  +rect(20, 20)
+                  margin: 3px
+                  background-color: transparentize($second_color, 0.3)
+                  cursor: pointer
+                  &.selected
+                    background-color: $second_color
+                  &:hover
+                    background-color: $second_color
+                    +rect(22, 22)
+                    margin: 2px
+                    
+                  
+                  
+                  
+            
+        &#main_area
+          #latest_news_component    
+            .entries
+              .entry
+                padding: 5px 10px 5px 84px
+                overflow: hidden
+                background-color: lighten($dark_color, 98)
+                margin-bottom: 2px
+                &:hover
+                  background-color: lighten($dark_color, 95)
+                .entry_content
+                  margin-top: $main_font_size * -0.5 
+                      
+                .entry_featured_image
+                  +rect(64, 64)
+                  margin-left: -74px
+                  float: left
+                  overflow: hidden
+                  img.not_found
+                    +opacity(0.1)
+                
+                  
+        .component   
+          .entry
+            .entry_title
+            .entry_content       
+              .field
+                font: #{$main_font_size * 0.9}/#{$main_font_size * 0.9}
+                padding-left: 30%
+                clear: both
+                float: none
+                label
+                  font-weight: bold
+                  margin-left: #{(-300/7)+'%'}
+                  width: #{(-150/7)+'%'}
+                  float: left
+                .field_content
+                  text-align: right
+              .continue_reading_part
+                font-size: $main_font_size * 0.9
+                font-style: italic
+                color: lighten($main_text_color, 50)
+                &:hover
+                  color: $third_color
+                  
+              ul, ol
+                padding: ($main_font_size * 0.5) 0 
+                > li        
+                  line-height: $main_font_size * 1.7
+                  padding: ($main_font_size * 0.25) 0   
+                  list-style: disc
+                  margin-left: $main_font_size * 3
+                  ul, ol
+                    > li
+                      line-height: $main_font_size * 1.7
+                      padding: 0
+              ol
+                > li
+                  list-style: decimal    
+                  
+          &#single_component
+            .entry
+              .entry_title
+              .entry_content
+              .entry_meta
+                font-size: $main_font_size * 0.9
+                color: lighten($main_text_color, 40)
+                padding-top: $main_font_size * 0.5
+                padding-bottom: $main_font_size * 2
+                span
+                  margin-right: 10px
+          &#comments_component
+            .entries
+              .entry
+                padding: 10px 10px
+                background-color: lighten($dark_color, 98)
+                margin-bottom: 2px
+                &:hover
+                  background-color: lighten($dark_color, 95)
+                .posted_date_part
+                  font: #{$main_font_size * 0.9} $main_font_family
+                  color: lighten($main_text_color, 40)
+                  padding-left: 10px
+                .entry_content
+          &#comment_form_component
+            .component_content
+              padding: 10px 10px
+              background-color: lighten($dark_color, 80)
+              .field
+                margin-bottom: $main_font_size
+                label
+                  display: block
+                  font-size: $main_font_size
+                input[type=text]
+                  +rect(520, 36)
+                  font: #{$main_font_size * 1.2} / #{$main_font_size * 1.7 * 1.2} $main_font_family
+                  border-style: none
+                textarea
+                  +rect(520, 200)
+                  font: #{$main_font_size * 1.2} / #{$main_font_size * 1.7 * 1.2} $main_font_family
+                  padding: ($main_font_size * 0.5) 0
+                  border-style: none
+        
+    #sidebar_right_region.region
+  #footer_region.region
+    background-color: lighten($dark_color, 85)
+    $footer_top_height: 260px
+    #footer_top_area
+      height: $footer_top_height
+    #footer_bottom_area
+      height: $footer_height - $footer_top_height
+      background-color: $second_color
+      color: $bright_color
+      .component
+        &#copyright_component
+          text-align: center
+          a
+            text-decoration: underline
+            color: $bright_color
+
+
+.component
+  padding-top: 10px
+  padding-bottom: 10px
+  .component_title 
+    font: #{$main_font_size * 2} Museo700, $display_font_family
+    color: $dark_color
+    margin-bottom: 10px
+  .component_content
+    .entries
+      .entry
+        margin-bottom: 10px
+        .entry_title
+
+
+.entry
+  .entry_title
+  .entry_content
+    
+    
+.entries
+  .entry
+    .entry_title
+    .entry_content
+    .entry_meta
+
+.component
+  .component_title
+  .component_content
+
+.region
+  .area
+    .section
+      .part
+
+
+table
+  tr
+    th, td
+      padding: 2px 5px
+
+
+.menu.page_menu
+  a
+    display: block
+  > ul
+    > li
+      float: left
+      > div 
+        a
+          padding: 17px 10px
+          font: 16px/16px $display_font_family
+          color: $dark_color
+          &:hover
+            color: $second_color
+            text-decoration: none
+            background-color: lighten($dark_color, 90)
+      > ul
+        display: none
+        > li
+          > div
+            > a
+          > ul
+            > li
+              > div
+                >a
+                
+      &.has_children
+        position: relative
+        > div
+          a
+        &:hover
+          > div
+            a
+              color: $second_color
+              text-decoration: none
+              background-color: lighten($dark_color, 90)
+          > ul
+            display: block
+            position: absolute
+            +box-shadow(0px 3px 4px 0px transparentize($dark_color, 0.7))
+            > li
+              > div
+                a
+                  padding: 17px 12px 17px 10px
+                  color: $second_color
+                  text-decoration: none
+                  background-color: lighten($dark_color, 90)
+                  white-space: nowrap
+                  &:hover
+                    background-color: lighten($dark_color, 95)
+                    
+
+
+
+$menu_border_color: lighten($dark_color, 90)
+.menu.menu_component
+  a
+    display: block
+    &:hover
+      color: $second_color
+      text-decoration: none
+      background-color: mix($second_color, white, 10)
+  > ul
+    border-bottom: 1px solid $menu_border_color
+    > li
+      > div 
+        a
+          border-top: 1px solid $menu_border_color
+          padding: 6px 0px
+          font: 14px/14px $main_font_family
+      > ul
+        > li
+          > div
+            > a
+              border-top: 1px dashed $menu_border_color
+              margin-left: 10px
+              padding: 4px 0px
+              font: 11px/11px
+          > ul
+            > li
+              > div
+                >a
+                
+
+
+
+.field
+  label
+  textarea
+    height: 120px
+
+
+
+
+
+
+.component.admin_toolbar_component
+  overflow: hidden
+  position: fixed
+  top: 0px
+  left: 0px
+  padding: 10px
+  +border-radius(0 0 6px 0)
+  background: #555
+  color: white
+  z-index: 10000
+  +opacity(0.1)
+  a
+    color: white
+  &:hover
+    top: 0px
+    +opacity(1)
+  li
+    margin-right: 20px

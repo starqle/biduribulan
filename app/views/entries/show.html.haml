@@ -1,0 +1,49 @@
+.component#single_component
+  .component_content
+    .entry
+      %h1.entry_title
+        = @entry.title
+      .entry_meta
+        %span.posted_by_part
+          = @entry.user.email
+        %span.posted_date_part
+          = @entry.updated_at.to_s(:long)
+        %span.total_comments_part
+          = "#{@entry.comments.count} " + "comment".pluralize(@entry.comments.count)
+       
+      .entry_featured_image= image_tag @entry.children.find_by_entry_type('media').image.url(:article_fit) if @entry.children.find_by_entry_type('media').present?
+        
+      .entry_content.component_content
+        = raw(@entry.content)
+      .entry_foot.component_foot
+        = link_to 'Edit', edit_admin_entry_path(@entry) if can? :edit, @entry
+  
+- if @entry.allow_comment? 
+  .component#comments_component
+    .component_title
+      - if @entry.comments.present?
+        = @entry.comments.count
+        = "comment".pluralize(@entry.comments.count).capitalize
+      - else
+        There's no comment yet
+    .component_content
+      .entries
+        = render @entry.comments
+      
+  .component#comment_form_component
+    .component_title
+      Leave a comment:
+    .component_content
+      = render "comments/form"
+
+- else #if theres some comments, just show that comments
+  - if @entry.comments.present?
+    .component#comments_component
+      .component_title
+        = @entry.comments.count
+        = "comment".pluralize(@entry.comments.count).capitalize
+      .component_content
+        .entries
+          = render @entry.comments
+        
+        

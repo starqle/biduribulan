@@ -1,0 +1,35 @@
+= simple_form_for [:admin, @taxonomy], html: {class: 'form-horizontal'} do |f|
+  = f.error_notification
+
+  = f.input :taxonomy_type, as: :hidden
+  = f.input :name
+  - if @taxonomy.is? 'menu'
+    - taxonomy_assignment = @taxonomy.taxonomy_assignments.select{|s| s.entry.is? 'link'}.first.presence || @taxonomy.taxonomy_assignments.build
+    = f.simple_fields_for :taxonomy_assignments, taxonomy_assignment do |f_ta|
+      = f_ta.association :entry, collection: Entry.find_all_by_entry_type('link').collect{|c| [c.title, c.id]}, prompt: '- none -'
+
+  - else
+    = f.input :description
+
+  - if Taxonomy.get(@taxonomy.taxonomy_type)['hierarchical']
+    - unless @taxonomy.is? 'menu'
+      = f.association :parent, collection: Taxonomy.get_tree(@taxonomy.taxonomy_type).collect {|t| ['- '*t.depth + t.name, t.id ] }, prompt: 'Please select'
+
+
+  - if @taxonomy.is? 'menu'
+    .field
+      = label_tag 'Children'
+      %br
+  
+    - (@taxonomy.children + [@taxonomy.children.build(:taxonomy_type => 'menu')]).each do |child|
+      = f.simple_fields_for :children, child do |f_c|
+        = f_c.input :taxonomy_type, as: :hidden
+        = f_c.input :name
+          
+        - taxonomy_assignment = child.taxonomy_assignments.select{|s| s.entry.try('is?', 'link')}.first.presence || child.taxonomy_assignments.build
+        = f_c.simple_fields_for :taxonomy_assignments, taxonomy_assignment do |f_c_ta|
+          = f_c_ta.association :entry, collection: Entry.find_all_by_entry_type('link').collect{|c| [c.title, c.id]}, prompt: '- none -'
+        
+        
+  .form-actions
+    = f.button :submit, class: 'btn-large btn-primary'

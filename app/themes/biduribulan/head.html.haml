@@ -1,0 +1,8 @@
+%head
+  %title
+    = BIDURI['info']['name']
+    = '::'
+    = yield(:title).presence || "CMS"
+  = stylesheet_link_tag    "application", Option.stylesheet_dir + "styles", :media => "all"
+  = javascript_include_tag Option.theme_dir + "javascripts/function"
+  = csrf_meta_tags

@@ -1,0 +1,20 @@
+#toolbar_area.area.grid_12
+  #toolbar_component.component
+    - if user_signed_in?
+      Sign in as
+      = current_user.email
+      , not you?
+      = link_to "sign_out", destroy_user_session_path, :method => :delete
+    - else
+      = link_to "sign_up", new_user_registration_path
+      ,
+      = link_to "sign_in", new_user_session_path
+      ,
+      = link_to "sign in from twitter", '/auth/twitter'
+
+#logo_component.component
+  %a.logo.header_logo{href: '/'}
+
+#navigation_area.area
+  = menu_tree_page(home: true)
+

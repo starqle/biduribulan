@@ -1,0 +1,59 @@
+entry_types: 
+  - name: Post 
+    entry_type: post 
+    taxonomies:
+      - name: Category
+        taxonomy_type: category
+        hierarchical: true  #<== default false
+        multiple: true #<== default false
+        
+      - name: Tag
+        taxonomy_type: post_tag
+        multiple: true
+        
+  - name: Page 
+    entry_type: page 
+  
+  - name: Media 
+    entry_type: media
+    taxonomies:
+      - name: Media Category
+        taxonomy_type: media_category
+        hierarchical: true
+        multiple: true
+
+      - name: Media Group
+        taxonomy_type: media_group
+        hierarchical: true
+        
+  - name: Link 
+    entry_type: link
+    has_own_page: false #<== determine wheater the entry type has its own page/ its own single page
+    taxonomies:    
+      - name: Link Category
+        taxonomy_type: link_category
+        multiple: true
+        
+  - name: Menu
+    entry_type: menu
+    has_own_page: false
+    taxonomies:     
+      - name: Menu Node
+        taxonomy_type: menu
+        hierarchical: true
+
+
+  # put your custom entry_types below
+  #################################################
+
+  - name: Portfolio 
+    entry_type: protfolio 
+    taxonomies:
+      - name: Portfolio Category
+        taxonomy_type: protfolio_category
+        hierarchical: true  #<== default false
+        multiple: true
+        
+      - name: Portfolio Tag
+        taxonomy_type: protfolio_tag
+        multiple: true

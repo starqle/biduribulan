@@ -1,0 +1,34 @@
+%h1
+  Listing
+  = Taxonomy.get(params[:taxonomy_type])['name'].pluralize
+
+%table
+  %tr
+    %th Name
+    %th Taxonomy type
+    %th Slug
+    %th Description
+    %th Parent
+    %th Lft
+    %th Rgt
+    %th
+    %th
+    %th
+
+  - @taxonomies.each do |taxonomy|
+    %tr
+      %td= taxonomy.name
+      %td= taxonomy.taxonomy_type
+      %td= taxonomy.slug
+      %td= taxonomy.description
+      %td= taxonomy.taxonomy_id
+      %td= taxonomy.lft
+      %td= taxonomy.rgt
+      %td= link_to 'Show', [:admin, taxonomy]
+      %td= link_to 'Edit', edit_admin_taxonomy_path(taxonomy)
+      %td= link_to 'Destroy', [:admin, taxonomy], :confirm => 'Are you sure?', :method => :delete
+      %td= link_to 'Assign Student', edit_admin_taxonomy_path(taxonomy, :student_assignment => true)
+
+%br
+
+= link_to 'New ' + Taxonomy.get(params[:taxonomy_type])['name'], new_admin_taxonomy_path(:taxonomy_type => params[:taxonomy_type])

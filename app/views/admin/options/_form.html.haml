@@ -1,0 +1,56 @@
+= form_for [:admin, @option] do |f|
+  -if @option.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@option.errors.count, "error")} prohibited this option from being saved:"
+      %ul
+        - @option.errors.full_messages.each do |msg|
+          %li= msg
+
+  = f.hidden_field :option_type
+  .field
+    = f.label :key, 'Name'
+    = f.text_field :key
+  .field
+    = label_tag 'entry_types', 'Apply to'
+    = text_field_tag 'entry_types', @option.value.present? ? @option.value['entry_types'].presence || '' : ''
+
+  .field
+    = label_tag 'Custom Field'
+    %br
+  - idx = 0
+  - if @option.value.present? && @option.value['fields'].present?
+    - @option.value['fields'].each do |field|
+      .field
+        = label_tag 'Field'
+        %br
+      .field
+        = label_tag "field[#{idx}]name", 'name'
+        = text_field_tag "field[#{idx}]name", field['name'].presence || ''
+      .field
+        = label_tag "field[#{idx}]label", 'label'
+        = text_field_tag "field[#{idx}]label", field['label'].presence || ''
+      .field
+        = label_tag "field[#{idx}]type", 'type'
+        = select "field[#{idx}]", "type", CUSTOM_TAGS.collect {|p| [ p.underscore.humanize, p.underscore ] }, { include_blank: '-Please Select-', selected: field['type'].presence || '' }
+      .field
+        = label_tag "field[#{idx}]option", 'option'
+        = text_area_tag "field[#{idx}]option", field['option'].presence || ''
+      - idx += 1
+
+  .field
+    = label_tag 'Field'
+    %br
+  .field
+    = label_tag "field[#{idx}]name", 'name'
+    = text_field_tag "field[#{idx}]name"
+  .field
+    = label_tag "field[#{idx}]label", 'label'
+    = text_field_tag "field[#{idx}]label"
+  .field
+    = label_tag "field[#{idx}]type", 'type'
+    = select "field[#{idx}]", "type", CUSTOM_TAGS.collect {|p| [ p.underscore.humanize, p.underscore ] }, { include_blank: '-Please Select-'}    
+  .field
+    = label_tag "field[#{idx}]option", 'option'
+    = text_area_tag "field[#{idx}]option"
+  .actions
+    = f.submit 'Save'

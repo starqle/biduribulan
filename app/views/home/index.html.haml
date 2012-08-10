@@ -1,0 +1,2 @@
+%h2 Role
+= current_user.roles.map{|x| x.name}.join(', ') if current_user

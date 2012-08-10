@@ -1,0 +1,54 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @entry.name
+%p
+  %b Parent:
+  = @entry.parent_id
+%p
+  %b Lft:
+  = @entry.lft
+%p
+  %b Rgt:
+  = @entry.rgt
+%p
+  %b Title:
+  = @entry.title
+%p
+  %b Content:
+  = @entry.content
+%p
+  %b User:
+  = @entry.user
+%p
+  %b Excerpt:
+  = @entry.excerpt
+%p
+  %b Status:
+  = @entry.status
+%p
+  %b Comment status:
+  = @entry.comment_status
+%p
+  %b Parent:
+  = @entry.entry_id
+%p
+  %b Guid:
+  = @entry.guid
+%p
+  %b Menu order:
+  = @entry.menu_order
+%p
+  %b Entry Type:
+  = @entry.entry_type
+%p
+  %b Mime type:
+  = @entry.mime_type
+
+= link_to 'Edit', edit_admin_entry_path(@entry)
+\|
+= link_to 'Back', admin_entries_path
+
+- if @entry.entry_type == 'page'
+  = link_to 'Add new child', new_child_admin_entry_path(:entry_id => @entry.id)

@@ -1,0 +1,18 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @taxonomy.name
+%p
+  %b Slug:
+  = @taxonomy.slug
+%p
+  %b Description:
+  = @taxonomy.description
+%p
+  %b Parent:
+  = @taxonomy.taxonomy_id
+
+= link_to 'Edit', edit_admin_taxonomy_path(@taxonomy)
+\|
+= link_to 'Back', admin_taxonomies_path(:taxonomy_type => @taxonomy.taxonomy_type)

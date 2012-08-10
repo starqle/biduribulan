@@ -1,0 +1,76 @@
+!!!
+%html
+  = render_file 'head'
+  %body{class: "#{body_class}"}
+    #wrapper.container_12
+      #header_region.region
+        = render_file 'header'
+      #main_region.region.grid_9
+        = render_file 'notification'
+
+
+        #featured_area.area.grid_9.alpha.omega
+          #featured_component.component
+            .component_content
+              - EntryMeta.find_all_by_key('Custom field for post Featured Post'.parameterize.underscore).select{|s| s.value.to_i != 0}.each do |entry_meta|
+                - fpost = entry_meta.entry
+                - if fpost.present? && fpost.status == 'publish'
+                  .entry.featured_post_entry
+                    %h1.entry_title.featured_post_entry_title
+                      = link_to fpost.title, fpost.url
+                    .entry_content.featured_post_entry_content
+                      - fpost_image = fpost.children.find_by_entry_type('media')
+                      - if fpost_image.present?
+                        = link_to image_tag(fpost_image.image(:featured_fit)), fpost.url
+
+        #main_area.area.grid_9.alpha.omega
+          #latest_news_component.component.grid_6.alpha
+            .component_title
+              Berita Terkini
+            .component_content
+              .entries
+                - Entry.all_posts.each do |post|
+                  .entry.post_entry
+                    .entry_featured_image
+                      - post_image = post.children.find_by_entry_type('media')
+                      - if post_image.present?
+                        = link_to image_tag(post_image.image(:square128)), post.url
+                      - else
+                        = link_to image_tag("#{THEME}/images/logo.png", :class => 'not_found'), post.url
+                    %h2.entry_title
+                      = link_to post.title, post.url
+                    .entry_content
+                      = truncate_html(post.content, 170, ' ... ' + link_to('baca selengkapnya', post.url, :class => 'continue_reading_part'))
+                      
+          #events_component.component.grid_3.omega
+            .component_title
+              Kegiatan
+            .component_content
+              - Entry.all_events.select{|e| e.start_date.present? && e.start_date > Date.current}.sort{|a, b| a.start_date <=> b.start_date}.each do |post|
+                .entry.post_entry
+                  %h2.entry_title
+                    = link_to post.title, post.url
+                  .entry_content
+                    .field
+                      = label_tag 'Tanggal'
+                      .field_content
+                        = post.start_date.to_s(:long)
+                    .field
+                      = label_tag 'Hingga'
+                      .field_content
+                        = post.end_date.to_s(:long)
+                    .field
+                      = label_tag 'Frekuensi'
+                      .field_content
+                        = post.custom_field_value('Events Custom Field', 'Frequency')
+                    = truncate_html(post.content, 120)
+                    
+                    
+                    
+
+
+
+      = render_file 'sidebar'
+      /= render_file 'yielded'
+      #wrapper_footer
+    = render_file 'footer'

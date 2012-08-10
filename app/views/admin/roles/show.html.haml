@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @role.name
+%p
+  %b Parent:
+  = @role.description
+
+= link_to 'Edit', edit_admin_role_path(@role)
+\|
+= link_to 'Back', admin_roles_path

@@ -1,0 +1,21 @@
+%h1 Listing themes
+
+%table
+  %tr
+    %th Name
+    %th Version
+    %th Directory Name
+    %th
+
+  - @themes.each do |theme|
+    %tr
+      %td= theme[:name]
+      %td= theme[:version]
+      %td= theme[:dirname]
+      %td
+        - if Option.theme_dir == (theme[:dirname] + '/')
+          Active theme
+        - else
+          = link_to 'Activate', admin_theme_activate_path(theme[:dirname])
+
+%br

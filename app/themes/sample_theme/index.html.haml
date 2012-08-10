@@ -1,0 +1,17 @@
+!!!
+%html
+  = render_file 'head'
+  %body{class: "#{body_class}"}
+    #wrapper.container_12
+      #header_region.region
+        = render_file 'header'
+      #main_region.region.grid_9
+        = render_file 'notification'   
+        
+        #yielded_area.area.grid_7.alpha.omega
+          = render_file 'yielded'
+            
+            
+      = render_file 'sidebar'
+      #wrapper_footer
+    = render_file 'footer'

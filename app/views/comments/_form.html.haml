@@ -1,0 +1,16 @@
+
+= form_for([@entry, @entry.comments.build]) do |f|
+  - if current_user.nil?
+    .field
+      = f.label :author_name, "Your name"
+      = f.text_field :author_name
+    .field
+      = f.label :author_email, "Email"
+      = f.text_field :author_email
+  .field
+    = f.label :content, "Comment"
+    = f.text_area :content
+  
+  .actions
+    = f.submit "Send comment"
+ 

@@ -1,0 +1,23 @@
+%h1
+  Listing
+  = 'Custom Fields'
+
+%table
+  %tr
+    %th Name
+    %th Applied to
+    %th
+    %th
+    %th
+
+  - @options.each do |option|
+    %tr
+      %td= option.key
+      %td= option.value['entry_types']
+      %td= link_to 'Show', [:admin, option]
+      %td= link_to 'Edit', edit_admin_option_path(option)
+      %td= link_to 'Destroy', [:admin, option], :confirm => 'Are you sure?', :method => :delete
+
+%br
+
+= link_to 'New Custom Fields', new_admin_option_path(:option_type => 'custom_field')

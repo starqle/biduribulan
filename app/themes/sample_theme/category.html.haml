@@ -1,0 +1,20 @@
+!!!
+%html
+  = render_file 'head'
+  %body
+    #wrapper
+      #header.container_12
+        CATEGORY
+        = render_file 'header'
+      #wrapper_content.container_12
+        - if notice
+          %p#notice= notice
+        - if alert
+          %p#alert= alert
+          
+        = debug params
+        = render_file 'yielded'
+        
+    #footer.container_12
+      = render_file 'footer'
+

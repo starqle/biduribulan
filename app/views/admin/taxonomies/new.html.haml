@@ -1,0 +1,7 @@
+%h1 
+  New
+  = Taxonomy.get(@taxonomy.taxonomy_type)['name']
+
+= render 'form'
+
+= link_to 'Back', admin_taxonomies_path(:taxonomy_type => @taxonomy.taxonomy_type)
